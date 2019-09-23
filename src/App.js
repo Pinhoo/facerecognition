@@ -6,6 +6,8 @@ import Navigation from './components/Navigation/Navigation.js';
 import Logo from './components/Logo/Logo.js';
 import Form from './components/Form/Form.js';
 import Rank from './components/Rank/Rank.js';
+import Signin from './components/Signin/Signin.js';
+import Register from './components/Register/Register.js';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition.js';
 
 const particleOptions = {
@@ -30,7 +32,9 @@ class App extends Component {
       this.state = {
           input: '',
           imageUrl: '',
-          box:{}
+          box:{},
+          route: 'signin',
+          isSignedIn: false
         }
     }
 
@@ -65,19 +69,42 @@ class App extends Component {
       
     }
 
+  onRouteChange = (route) => {
+    if(route==='signout')
+      {
+         this.setState({isSignedIn: false})
+       }
+       else if (route==='home')
+        {
+         this.setState({isSignedIn: true})
+       }
+
+    this.setState({route: route});
+    }
+
   render()
   {
-  return (
-    <div className="App">
-      <Particles className='particles' params={particleOptions} />
-      <Navigation />
-      <Logo />
-      <Rank/>
-      <Form onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-      <FaceRecognition box={this.state.box} image={this.state.imageUrl} />
-    </div>
-  );
-}
-}
+     const {isSignedIn, route, box, imageUrl} = this.state;
+      return (
+        <div className="App">
+          <Particles className='particles' params={particleOptions} />
+          <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+          {this.state.route === 'home'
+              ? <div>
+                  <Logo />
+                  <Rank/>
+                  <Form onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
+                  <FaceRecognition box={box} image={imageUrl} />
+                </div>
+                :
+                (route === 'signin' ?
+                 <Signin onRouteChange={this.onRouteChange}/>
+                 :
+                 <Register onRouteChange={this.onRouteChange}/>)
+          }
+        </div>
+        );
+    }   
+  }
 
 export default App;
