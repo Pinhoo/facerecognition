@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Navigation from './components/Navigation/Navigation';
+import Signin from './components/Signin/Signin';
+import Register from './components/Register/Register';
+import Logo from './components/Logo/Logo';
+import Form from './components/Form/Form';
+import Rank from './components/Rank/Rank';
 import './App.css';
-import Navigation from './components/Navigation/Navigation.js';
-import Logo from './components/Logo/Logo.js';
-import Form from './components/Form/Form.js';
-import Rank from './components/Rank/Rank.js';
-import Signin from './components/Signin/Signin.js';
-import Register from './components/Register/Register.js';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition.js';
 
 const particlesOptions = {
   particles: {
@@ -16,15 +16,15 @@ const particlesOptions = {
       density: {
         enable: true,
         value_area: 800
-        }
       }
     }
   }
+}
 
 const initialState = {
   input: '',
   imageUrl: '',
-  box:{},
+  box: {},
   route: 'signin',
   isSignedIn: false,
   user: {
@@ -33,26 +33,24 @@ const initialState = {
     email: '',
     entries: 0,
     joined: ''
-    }
   }
-
+}
 
 class App extends Component {
   constructor() {
-      super();
-      this.state = initialState
-        }
+    super();
+    this.state = initialState;
+  }
 
   loadUser = (data) => {
-    this.setState({
-      user: {
+    this.setState({user: {
       id: data.id,
       name: data.name,
       email: data.email,
       entries: data.entries,
       joined: data.joined
-        }})
-    }
+    }})
+  }
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -61,19 +59,19 @@ class App extends Component {
     const height = Number(image.height);
     return {
       leftCol: clarifaiFace.left_col * width,
-      rightCol: width - (clarifaiFace.right_col * width),
       topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
       bottomRow: height - (clarifaiFace.bottom_row * height)
-      }
+    }
   }
 
-  displayFaceBox = (box) => { 
-    this.setState({box: box})
-    }
+  displayFaceBox = (box) => {
+    this.setState({box: box});
+  }
 
   onInputChange = (event) => {
-      this.setState({ input: event.target.value });
-    }
+    this.setState({input: event.target.value});
+  }
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
@@ -107,21 +105,16 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    if(route==='signout')
-      {
-         this.setState(initialState)
-       }
-       else if (route==='home')
-        {
-         this.setState({isSignedIn: true})
-       }
-
-    this.setState({route: route});
+    if (route === 'signout') {
+      this.setState(initialState)
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
     }
+    this.setState({route: route});
+  }
 
-  render()
-  {
-     const { isSignedIn, imageUrl, route, box } = this.state;
+  render() {
+    const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
          <Particles className='particles'
@@ -149,7 +142,7 @@ class App extends Component {
         }
       </div>
     );
-    }   
   }
+}
 
 export default App;
